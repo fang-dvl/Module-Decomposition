@@ -4,6 +4,15 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(addUsernameProp);
+
+const addUsernameProp = function (req, res, next) {
+	const username = req.get("X-Username");
+
+	req.username = username ?? null;
+
+	next();
+};
 
 app.post("/", (req, res) => {
 	let responseText = "";
@@ -28,9 +37,7 @@ app.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}`);
 });
 
-// Make a copy of your previous middleware application.
-
-// Delete the middleware you wrote that handles the JSON request POST body.
+// Here is the problem:
 
 // Switch to instead the JSON middleware built in to Express.
 // app.use(express.json()); instead of parseBody
