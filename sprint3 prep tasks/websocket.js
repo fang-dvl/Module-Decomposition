@@ -108,17 +108,30 @@ chatFeedDiv.addEventListener("click", async (event) => {
 function render() {
 	chatFeedDiv.innerHTML = "";
 	state.messages.forEach((msg) => {
-		chatFeedDiv.innerHTML += `
-            <div class="div-for-each-msg" data-id="${msg.id}">
-                <p class="msg-in-chat-view">${msg.msgText}</p>
-                <p class="username-in-chat-view">${msg.username}</p>
-                <div class="likedislike-div">
-                    <button class="like-btn">Like</button>
-                    <p class="likes-count">Liked ${msg.likesCount}</p>
-                    <button class="dislike-btn">Dislike</button>
-                    <p class="dislikes-count">Disliked ${msg.dislikesCount}</p>
-                </div>
-            </div>`;
+		const messageDiv = document.createElement("div");
+		messageDiv.className = "div-for-each-msg";
+		messageDiv.dataset.id = msg.id;
+
+		const msgText = document.createElement("p");
+		msgText.className = "msg-in-chat-view";
+		msgText.textContent = msg.msgText;
+
+		const username = document.createElement("p");
+		username.className = "username-in-chat-view";
+		username.textContent = msg.username;
+
+		const buttonDiv = document.createElement("div");
+		buttonDiv.className = "likedislike-div";
+
+		buttonDiv.innerHTML = `
+            <button class="like-btn">Like</button>
+            <p class="likes-count">Liked ${msg.likesCount}</p>
+            <button class="dislike-btn">Dislike</button>
+            <p class="dislikes-count">Disliked ${msg.dislikesCount}</p>
+        `;
+
+		messageDiv.append(msgText, username, buttonDiv);
+		chatFeedDiv.appendChild(messageDiv);
 	});
 }
 

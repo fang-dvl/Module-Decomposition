@@ -100,18 +100,6 @@ sendBtn.addEventListener("click", sendMsg);
 // auto refresh
 // setInterval(seeAllMessages, 2000);
 
-//polling coursework
-// const keepFetchingMessages = async () => {
-//     const lastMessageTime = state.messages.length > 0 ? state.messages[state.messages.length - 1].timestamp : null;
-//     const queryString = lastMessageTime ? `?since=${lastMessageTime}` : "";
-//     const url = `${server}/messages${queryString}`;
-//     const rawResponse = await fetch(url);
-//     const response = await rawResponse.json();
-//     state.messages.push(...response);
-//     render();
-//     setTimeout(keepFetchingMessages, 100);
-// }
-
 let messages = [];
 const state = { messages: [] };
 
