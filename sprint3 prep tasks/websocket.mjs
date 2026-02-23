@@ -7,7 +7,6 @@ const app = express();
 // following coursework
 import { server as WebSocketServer } from "websocket";
 
-//ReferenceError: http is not defined
 import http from "http";
 
 const server = http.createServer(app);
@@ -37,8 +36,14 @@ const messages = [
 	},
 ];
 
+let globalIdCounter = 2;
+
 const getRecentMessages = (sinceTime) => {
-	return messages.filter((msg) => msg.timestamp > sinceTime);
+	const since = parseInt(sinceTime);
+	if (since) {
+		return messages.filter((msg) => msg.timestamp > since);
+	}
+	return messages;
 };
 
 //get all messages
@@ -48,12 +53,7 @@ app.get("/", (req, res) => {
 
 //get recent messages poll
 app.get("/messages", (req, res) => {
-	if (since) {
-		const onlyRecentMsgs = getRecentMessages(since);
-		res.json(onlyRecentMsgs);
-		return;
-	}
-	res.json(messages);
+	res.json(getRecentMessages(req.query.since));
 });
 
 //messages with long polling only
@@ -61,9 +61,8 @@ const callbacksForNewMessages = [];
 app.get("/long-poll", (req, res) => {
 	let messagesToSend = [];
 
-	const since = parseInt(req.query.since);
-	if (since) {
-		messagesToSend = getRecentMessages(since);
+	if (req.query.since) {
+		messagesToSend = getRecentMessages(req.query.since);
 	}
 
 	if (messagesToSend.length === 0) {
@@ -119,8 +118,7 @@ app.post("/", (req, res) => {
 			return;
 		}
 
-		// to add new id to message
-		const newId = messages.length + 1;
+		const newId = globalIdCounter++;
 
 		const newMessage = {
 			id: newId,
