@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 class OperatingSystem(Enum):
     MACOS = "macOS"
@@ -28,16 +28,24 @@ class Laptop:
     operating_system: OperatingSystem
 
 
-def allocate_laptops(people: List[Person], laptops: List[Laptop]) -> Dict[Person, Laptop]: 
-    allocations: Dict[Person, Laptop] = {}
+def allocate_laptops(people: List[Person], laptops: List[Laptop]) -> Dict[Person, Optional[Laptop]]: 
+    allocations: Dict[Person,  Optional[Laptop]] = {}
     available_laptops = laptops.copy()
     
     for person in people:
-        # Find laptop that gives this person minimum sadness
-        if available_laptops:
-            best_laptop = min(available_laptops, key=lambda l: calculate_sadness(person, l))
-            allocations[person] = best_laptop
-            available_laptops.remove(best_laptop)  # Laptop now allocated
+        allocated = None
+        for preferred_os in person.preferred_operating_system:
+            for laptop in available_laptops:
+                if laptop.operating_system == preferred_os:
+                    allocated = laptop
+                    break
+            if allocated:
+                break
+        
+        if allocated:
+            
+            allocations[person] = allocated
+            available_laptops.remove(allocated) 
         else:
             # No laptops left, assign None or a “dummy” Laptop with sadness 100
             allocations[person] = None 
@@ -45,7 +53,7 @@ def allocate_laptops(people: List[Person], laptops: List[Laptop]) -> Dict[Person
     return allocations  
 
 
-def calculate_sadness(person: Person, laptop: Laptop) -> int:
+def calculate_sadness(person: Person, laptop: Optional[Laptop]) -> int:
     """Return sadness for a person if given this laptop."""
     if laptop is None:
         return 100  # no laptop, maximum sadness
@@ -85,4 +93,3 @@ for person, laptop in allocations.items():
             f"→ Sadness: {calculate_sadness(person, laptop)}")
     else:
         print(f"{person.name} got no laptop → Sadness: 100")
-
