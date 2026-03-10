@@ -1,84 +1,77 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import List
+from functools import lru_cache
+from typing import Dict, List, Tuple
 
 class OperatingSystem(Enum):
-    MACOS= "macOS" 
-    ARCH= "Arch Linux"
-    UBUNTU= "Ubuntu"
+    MACOS = "macOS"
+    ARCH = "Arch Linux"
+    UBUNTU = "Ubuntu"
     WINDOWS = "windows"
 
 @dataclass(frozen=True)
 class Person:
     name: str
     age: int
-    preferred_operating_system: OperatingSystem
+    preferred_operating_systems: Tuple[OperatingSystem, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "preferred_operating_systems",
+            tuple(self.preferred_operating_systems),
+        )
 
 @dataclass(frozen=True)
 class Laptop:
-    id: 1
+    id: int
     manufacturer: str
     model: str
     screen_size_in_inches: float
     operating_system: OperatingSystem
 
-laptops = [
-    Laptop(id=1, manufacturer="Dell", model="XPS", screen_size_in_inches=13, operating_system=OperatingSystem.ARCH),
-    Laptop(id=2, manufacturer="Dell", model="XPS", screen_size_in_inches=15, operating_system=OperatingSystem.UBUNTU),
-    Laptop(id=3, manufacturer="Dell", model="XPS", screen_size_in_inches=15, operating_system=OperatingSystem.UBUNTU),
-    Laptop(id=4, manufacturer="Apple", model="macBook", screen_size_in_inches=13, operating_system=OperatingSystem.MACOS),
-]
+def sadness_for_allocation(person: Person, laptop: Laptop) -> int:
+    try:
+        return person.preferred_operating_systems.index(laptop.operating_system)
+    except ValueError:
+        return 100
 
 
-def user_details():
-    user_name = input("Please enter your name: ")
-    user_age = int(input("Please enter your age: "))
-    user_preferred_operating_system = input("Now tell us your preferred operating system in capital letters, 'MACOS', 'ARCH', or 'UBUNTU': ")
+def allocate_laptops(people: List[Person], laptops: List[Laptop]) -> Dict[Person, Laptop]:
+    if len(laptops) < len(people):
+        raise ValueError("Not enough laptops to allocate exactly one per person")
 
-    os_in_enum = OperatingSystem[user_preferred_operating_system]
-    
-    return Person(name=user_name, age=user_age, preferred_operating_system=os_in_enum)
+    people_tuple: Tuple[Person, ...] = tuple(people)
+    laptops_tuple: Tuple[Laptop, ...] = tuple(laptops)
 
+    @lru_cache(maxsize=None)
+    def best_from(person_index: int, used_mask: int) -> Tuple[int, Tuple[int, ...]]:
+        if person_index == len(people_tuple):
+            return 0, tuple()
 
-user = user_details()
+        best_total_sadness = float("inf")
+        best_choice: Tuple[int, ...] = tuple()
 
-def find_possible_laptops(laptops):
-    possible_laptops = []
+        for laptop_index, laptop in enumerate(laptops_tuple):
+            if used_mask & (1 << laptop_index):
+                continue
 
-    print(user.preferred_operating_system)
+            current_sadness = sadness_for_allocation(people_tuple[person_index], laptop)
+            remaining_sadness, remaining_choices = best_from(
+                person_index + 1,
+                used_mask | (1 << laptop_index),
+            )
+            candidate_total = current_sadness + remaining_sadness
 
-    for laptop in laptops:
-        if user.preferred_operating_system == laptop.operating_system:
-            possible_laptops.append(laptop)
+            if candidate_total < best_total_sadness:
+                best_total_sadness = candidate_total
+                best_choice = (laptop_index,) + remaining_choices
 
-    return possible_laptops
+        return best_total_sadness, best_choice
 
-def find_most_common_os(laptops: List[Laptop]) -> OperatingSystem:
-    os_count = {}
-    
-    for laptop in laptops:
-        os = laptop.operating_system
-        os_count[os] = os_count.get(os, 0) + 1
+    _, selected_laptop_indexes = best_from(0, 0)
 
-    most_common_os = max(os_count.items(), key=lambda x: x[1])
-
-    return most_common_os[0]
-
-# find_possible_laptops(laptops)
-
-def tell_user_outcome():
-    possible_laptops = find_possible_laptops(laptops)
-    most_common_os = find_most_common_os(laptops)
-
-
-    if len(possible_laptops) >= 1:
-        print(f"You're in luck, we have a laptop with your preferred os {user.preferred_operating_system.value}")
-              
-    elif any(laptop.operating_system == most_common_os for laptop in possible_laptops):
-        print(f"You're in luck, we have a laptop with your preferred os {user.preferred_operating_system.value}, we also have laptops operating {most_common_os.value}")
-
-    else:
-        print(f"Sorry, there are no longer laptops with {user.preferred_operating_system.value} available, but we are in position to lend you one with {most_common_os.value}")
-
-
-tell_user_outcome()
+    return {
+        person: laptops_tuple[laptop_index]
+        for person, laptop_index in zip(people_tuple, selected_laptop_indexes)
+    }
