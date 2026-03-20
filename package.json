@@ -1,0 +1,15 @@
+{
+  "name": "module-decomposition",
+  "version": "1.0.0",
+  "description": "Exercises to practice and solidify your understanding of the Decomposition module of the Software Development Course.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
