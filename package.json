@@ -1,0 +1,24 @@
+{
+  "name": "module-decomposition",
+  "version": "1.0.0",
+  "description": "Exercises to practice and solidify your understanding of the Decomposition module of the Software Development Course.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HassanOHOsman/Module-Decomposition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/HassanOHOsman/Module-Decomposition/issues"
+  },
+  "homepage": "https://github.com/HassanOHOsman/Module-Decomposition#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
