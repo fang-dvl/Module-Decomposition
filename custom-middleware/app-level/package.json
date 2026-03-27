@@ -1,0 +1,15 @@
+{
+    "name": "middleware-exercises",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "http-status-codes": "^2.3.0"
+    }
+}

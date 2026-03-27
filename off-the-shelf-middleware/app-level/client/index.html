@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subject Info Request</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <h1>Request Subject Information</h1>
+    <form id="subjectForm">
+      <label for="username">Username (optional):</label>
+      <input type="text" id="username" name="username" />
+      <label for="subjects">Subjects (one per line):</label>
+      <textarea
+        id="subjects"
+        name="subjects"
+        placeholder="e.g. Math\nScience\nHistory"
+      ></textarea>
+      <button type="submit">Submit</button>
+    </form>
+    <h2>Server Response:</h2>
+    <div id="response"></div>
+    <script src="./index.js"></script>
+  </body>
+</html>
