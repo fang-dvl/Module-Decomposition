@@ -1,54 +1,45 @@
-const messagesList = document.getElementById("messages-list");
-const form = document.getElementById("message-form");
-const input = document.getElementById("message-input");
-const usernameInput = document.getElementById("username-input");
+document.addEventListener("DOMContentLoaded", () => {
+  const messagesList = document.getElementById("messages-list");
+  const form = document.getElementById("message-form");
+  const input = document.getElementById("message-input");
+  const usernameInput = document.getElementById("username-input");
 
-const BACKEND_URL =
-  "https://zabihollah-namazi-chat-app-backend.hosting.codeyourfuture.io";
+  const BACKEND_URL = "https://zabihollah-namazi-chat-app-backend.hosting.codeyourfuture.io";
 
-// Fetch and display messages
-async function loadMessages() {
-  const response = await fetch(`${BACKEND_URL}/messages`);
-  const messages = await response.json();
-  messagesList.innerHTML = "";
-  messages.forEach((msg) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-    <div class="message-header">
-      <span class="username"> <strong>${msg.username}</strong></span>
-      <span class="timestamp">${msg.timeStamp}</span>
-      </div>
-      <div class="message-text">${msg.text}</div>`;
-    messagesList.appendChild(li);
-  });
-}
+  async function loadMessages() {
+    const res = await fetch(BACKEND_URL);
+    const messages = await res.json();
 
-// Handle form submission
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    messagesList.innerHTML = "";
 
-  const newMessage = {
-    username: usernameInput.value,
-    text: input.value,
-    timeStamp: new Date().toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }),
-  };
+    messages.forEach((msg) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div><strong>${msg.username}</strong></div>
+        <div>${msg.text}</div>
+        <small>${msg.timeStamp}</small>
+      `;
+      messagesList.appendChild(li);
+    });
+  }
 
-  await fetch(`${BACKEND_URL}/messages`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newMessage),
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: usernameInput.value,
+        text: input.value,
+      }),
+    });
+
+    input.value = "";
+    loadMessages();
   });
 
-  input.value = "";
   loadMessages();
+  setInterval(loadMessages, 1000);
 });
 
-loadMessages();
-// Refresh messages every 1 seconds
-setInterval(loadMessages, 1000);
