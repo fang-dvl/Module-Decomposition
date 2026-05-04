@@ -2,27 +2,21 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
-const port = 5000;
-
-app.use(cors());
+const PORT = 3000;
 app.use(express.json());
-
+app.use(cors());
 let messages = [];
 
-// GET messages
 app.get("/messages", (req, res) => {
-    res.json(messages);
+  res.json(messages);
 });
 
-// POST message
 app.post("/messages", (req, res) => {
-    const { username, text } = req.body;
-
-    messages.push({ username, text });
-
-    res.json({ success: true });
+  const message = req.body;
+  messages.push(message);
+  res.status(201).json(message);
 });
 
-app.listen(port, () => {
-    console.log(`Backend running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
