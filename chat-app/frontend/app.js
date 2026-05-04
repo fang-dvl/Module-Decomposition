@@ -1,31 +1,54 @@
-const API = "http://localhost:5000/messages";
+const messagesList = document.getElementById("messages-list");
+const form = document.getElementById("message-form");
+const input = document.getElementById("message-input");
+const usernameInput = document.getElementById("username-input");
 
+const BACKEND_URL =
+  "";
+
+// Fetch and display messages
 async function loadMessages() {
-    const res = await fetch(API);
-    const data = await res.json();
-
-    const ul = document.getElementById("messages");
-    ul.innerHTML = "";
-
-    data.forEach(m => {
-        const li = document.createElement("li");
-        li.textContent = `${m.username}: ${m.text}`;
-        ul.appendChild(li);
-    });
+  const response = await fetch(`${BACKEND_URL}/messages`);
+  const messages = await response.json();
+  messagesList.innerHTML = "";
+  messages.forEach((msg) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+    <div class="message-header">
+      <span class="username"> <strong>${msg.username}</strong></span>
+      <span class="timestamp">${msg.timeStamp}</span>
+      </div>
+      <div class="message-text">${msg.text}</div>`;
+    messagesList.appendChild(li);
+  });
 }
 
-async function send() {
-    const username = document.getElementById("username").value;
-    const text = document.getElementById("text").value;
+// Handle form submission
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, text })
-    });
+  const newMessage = {
+    username: usernameInput.value,
+    text: input.value,
+    timeStamp: new Date().toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }),
+  };
 
-    loadMessages();
-}
+  await fetch(`${BACKEND_URL}/messages`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newMessage),
+  });
 
-setInterval(loadMessages, 1000);
-loadMessages();
+  input.value = "";
+  usernameInput.value = "";
+  loadMessages();
+});
+
+// Refresh messages every 2 seconds
+setInterval(loadMessages, 2000);
