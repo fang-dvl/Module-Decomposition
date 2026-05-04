@@ -49,5 +49,6 @@ form.addEventListener("submit", async (e) => {
   loadMessages();
 });
 
+loadMessages();
 // Refresh messages every 1 seconds
 setInterval(loadMessages, 1000);
