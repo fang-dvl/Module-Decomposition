@@ -4,7 +4,7 @@ const input = document.getElementById("message-input");
 const usernameInput = document.getElementById("username-input");
 
 const BACKEND_URL =
-  "";
+  "https://zabihollah-namazi-chat-app-backend.hosting.codeyourfuture.io";
 
 // Fetch and display messages
 async function loadMessages() {
