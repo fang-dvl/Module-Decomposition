@@ -46,9 +46,8 @@ form.addEventListener("submit", async (e) => {
   });
 
   input.value = "";
-  usernameInput.value = "";
   loadMessages();
 });
 
-// Refresh messages every 2 seconds
-setInterval(loadMessages, 2000);
+// Refresh messages every 1 seconds
+setInterval(loadMessages, 1000);
