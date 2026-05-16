@@ -1,6 +1,6 @@
 import express from "express";
-import usernameMiddleware from "./middleware/usernameMiddleware";
-import jsonArrayMiddleware from "./middleware/jsonArrayMiddleware";
+import usernameMiddleware from "./middleware/usernameMiddleware.js";
+import jsonArrayMiddleware from "./middleware/jsonArrayMiddleware.js";
 
 const app = express();
 
@@ -26,6 +26,6 @@ app.post("/", usernameMiddleware, jsonArrayMiddleware, (req, res) => {
 });
 
 
-app.listen(3000, () => {
-  console.log("Server running on 3000");
+app.listen(4000, () => {
+  console.log("Server running on 4000");
 });
