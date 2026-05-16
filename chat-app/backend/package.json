@@ -7,10 +7,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "keywords": ["chat", "express", "backend"],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
+    "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2"
   }
 }
