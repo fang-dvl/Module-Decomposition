@@ -5,14 +5,7 @@
   "main": "app.js",
   "keywords": ["chat", "frontend"],
   "author": "",
+  "license": "UNLICENSED",
+  "private": true,
   "dependencies": {}
-
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
-  },
-    "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2"
-  }
 }
