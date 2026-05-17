@@ -5,6 +5,12 @@ const statusEl = document.querySelector('#status');
 const messagesEl = document.querySelector('#messages');
 const refreshButton = document.querySelector('#refresh-button');
 
+const API_BASE_URL = (window.API_BASE_URL || '').replace(/\/$/, '');
+
+function apiUrl(path) {
+  return `${API_BASE_URL}${path}`;
+}
+
 let lastMessageCount = 0;
 
 function setStatus(message, type = '') {
@@ -54,7 +60,7 @@ function escapeHtml(value) {
 }
 
 async function loadMessages() {
-  const response = await fetch('/api/messages');
+  const response = await fetch(apiUrl('/api/messages'));
 
   if (!response.ok) {
     throw new Error('Could not load messages');
@@ -78,7 +84,7 @@ async function sendMessage(event) {
   setStatus('Sending message...');
 
   try {
-    const response = await fetch('/api/messages', {
+    const response = await fetch(apiUrl('/api/messages'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
