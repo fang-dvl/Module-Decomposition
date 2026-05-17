@@ -1,0 +1,15 @@
+{
+  "name": "chat-app-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for chat app",
+  "main": "server.js",
+  "keywords": ["chat", "frontend"],
+  "author": "",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {}
+}
