@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Chat App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <h1>Basic Chat App</h1>
+        <p class="subtitle">
+          Send messages, see message history, and watch updates appear without
+          refreshing.
+        </p>
+      </header>
+
+      <section class="panel">
+        <h2>Send a message</h2>
+        <form id="message-form" class="form">
+          <label>
+            Name
+            <input id="name-input" type="text" maxlength="30" placeholder="Your name" />
+          </label>
+
+          <label>
+            Message
+            <textarea
+              id="text-input"
+              rows="3"
+              maxlength="500"
+              placeholder="Type your message"
+              required
+            ></textarea>
+          </label>
+
+          <button type="submit">Send</button>
+          <p id="status" class="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="messages-header">
+          <h2>Messages</h2>
+          <button id="refresh-button" type="button" class="secondary">Refresh</button>
+        </div>
+        <ul id="messages" class="messages"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

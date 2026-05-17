@@ -1,0 +1,9 @@
+{
+  "name": "chat-app-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for chat app",
+  "main": "app.js",
+  "keywords": ["chat", "frontend"],
+  "author": "",
+  "dependencies": {}
+}
