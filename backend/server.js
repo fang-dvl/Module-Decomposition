@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://k132vpmg7zf706ml1sw0aonr.178.105.39.91.sslip.io",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
