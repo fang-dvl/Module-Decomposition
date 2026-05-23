@@ -7,14 +7,16 @@ const path = require("path");
 const app = express();
 
 app.use(cors());
-
 app.use(express.static(path.join(__dirname, "../frontend")));
+
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "*"
+        origin: "http://k132vpmg7zf706ml1sw0aonr.178.105.39.91.sslip.io",
+        methods: ["GET", "POST"]
     }
 });
 
@@ -39,6 +41,6 @@ io.on("connection", (socket) => {
 
 });
 
-server.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
+server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
